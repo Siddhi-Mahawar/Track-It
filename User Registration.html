@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<!-- saved from url=(0030)http://liberals.epizy.com/?i=1 -->
+<html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+       <title>User Registration</title>
+       <meta name="viewport" content="width=device-width, initial-scale=1">
+       <link rel="stylesheet" href="./User Registration_files/bootstrap.min.css">
+       <link rel="stylesheet" href="./User Registration_files/font-awesome.min.css">
+       <script src="./User Registration_files/jquery.min.js.download"></script>
+       <script src="./User Registration_files/bootstrap.min.js.download"></script>
+       <link rel="stylesheet" type="text/css" href="./User Registration_files/style.css">
+       <link href="./User Registration_files/css" rel="stylesheet">
+    <link href="./User Registration_files/css(1)" rel="stylesheet">
+    <link href="./User Registration_files/css(2)" rel="stylesheet">
+    <!-- CSS LIBRARY -->
+    <link rel="stylesheet" type="text/css" href="./User Registration_files/font-awesome.min(1).css">
+    <link rel="stylesheet" type="text/css" href="./User Registration_files/ionicons.min.css">
+    <link rel="stylesheet" type="text/css" href="./User Registration_files/owl.carousel.min.css">
+    <link rel="stylesheet" type="text/css" href="./User Registration_files/gallery.css">
+    <link rel="stylesheet" type="text/css" href="./User Registration_files/vit-gallery.css">
+    <link rel="shortcut icon" type="text/css" href="./User Registration_files/favicon.png">
+    <link rel="stylesheet" type="text/css" href="./User Registration_files/bootstrap-select.min.css">
+    <link rel="stylesheet" type="text/css" href="./User Registration_files/bootstrap-datepicker.css">
+    <!-- MAIN STYLE -->
+    <link rel="stylesheet" href="./User Registration_files/styles.css">
+<script type="text/javascript" charset="UTF-8" src="./User Registration_files/common.js.download"></script><script type="text/javascript" charset="UTF-8" src="./User Registration_files/util.js.download"></script></head>
+<script>
+	function hashCode(str) {
+    return str.split('').reduce((prevHash, currVal) =>
+      (((prevHash << 5) - prevHash) + currVal.charCodeAt(0))|0, 0);
+  	}
+	function hey()
+	{
+		
+		var x=document.getElementById('pass').value;
+		var y = hashCode(x);
+		document.getElementById("pass").value =y;  
+	}
+	</script>
+
+<?php
+
+	include 'core/init.php';
+	$con = mysqli_connect('localhost','root','','mytrack');
+	if(isset($_SESSION['logincust']))
+	{
+		$ema= $_SESSION['email'];
+		$fname =$_SESSION['first_name'];
+		$pass=md5($fname);
+		$pass = md5(md5($email).md5($pass));
+		$lname = $_SESSION['last_name'];
+		$q1="SELECT * from users where email='$ema'";
+		$res1=mysqli_query($con,$q1);
+		if(mysqli_num_rows($res1)==0)
+		{
+				$q2="INSERT INTO users(username,email,firstName,lastName,password) VALUES('$fname','$ema','$fname','$lname','$pass')";
+				$res2=mysqli_query($con,$q2);
+		}	
+		$q1="SELECT * from users where email='$ema'";
+		$res1=mysqli_query($con,$q1);
+		$r = mysqli_fetch_array($res1);
+		$_SESSION['user_id']=$r['user_id'];
+		header('Location: home.php');
+	}
+	// to check is user is already logged in
+	if($userObj->isLoggedIn()){
+ 	$userObj->redirect('home.php');
+ }
+
+	 // to check whether password and email match to our data
+	  
+	if(isset($_POST['login'])){
+ 	$email    = Validate::escape($_POST['email']);
+	 $password = Validate::escape($_POST['password']);
+	 $password = md5(md5($email).md5($password));
+	 echo $password;
+ 	if(empty($email) or empty($password)){
+ 		$error = "Enter your email and password to login!";
+ 	}else {
+ 		if(!Validate::filterEmail($email)){
+ 			$error = "Invaild email";
+ 		}else{
+ 			if($user = $userObj->emailExist($email)){
+ 				$hash = $user->password;
+ 				if(password_verify($password, $hash)){
+					 //login
+					$_SESSION['user_id'] = $user->user_id;
+ 					$userObj->redirect('home.php');
+ 				}else{
+ 					$error = "Email or Password is incorrect!";
+ 				}
+			}
+  			else{
+ 				$error = "No account with that email exists";
+ 			}
+ 		}
+ 	}
+ }
+?>
+
+
+
+<body>
+ 
+       <div id="home">
+        <div style="padding-top: 5pc">
+	<form method="post">
+
+                <div class="header">
+                        <h2> Login </h2>
+                </div>
+		<div class="input-group">
+			
+                        <input type="email" name="email_id" id="email" size="100%" autocomplete="off" placeholder="Email">
+		</div>
+		<div class="input-group">
+			
+                        <input type="password" name="password" id="pass" size="100%" placeholder="Password">
+        </div>
+        <select class="form-control" name="user" id="user">
+		<option value="1">User</option>
+		<option value="2">Admin</option>
+		
+    	 </select>
+            <div style="padding-top: 5px;">
+              
+                    <button type="submit" name="submit" class="btn " style="font-family: sans-serif;width: 49%" value="Login">Login</button>
+               
+                <a href="http://liberals.epizy.com/signup.php">    <button2 type="submit" name="signup" class="btn center" style="font-family: sans-serif ; width: 49%">SignUp</button2>
+                </a>
+				
+            </div>
+            <div class="input-group" style="text-align: right">
+                <p><a href="http://liberals.epizy.com/forgot.php">Forgot password?</a></p>               
+            </div>
+			<a href="https://accounts.google.com/o/oauth2/auth?response_type=code&amp;redirect_uri=http%3A%2F%2Flocalhost%2FEvent_Scheduler%2F&amp;client_id=1059580935164-7pimrs76tnau82j7gfb2s9gu69rufgbh.apps.googleusercontent.com&amp;scope=https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile+https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.email&amp;access_type=offline&amp;approval_prompt=force"><center><img src="./User Registration_files/loging.png" alt="Sign in with Google+" width="80%"></center></a>        </form>
+        </div>
+    </div>    
+    
+    
+ 
+
+</body></html>
