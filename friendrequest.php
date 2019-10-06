@@ -1,0 +1,90 @@
+<?php
+    
+    //include the functions of this page
+    include('functions.php');
+
+    //check whether logged in
+    if(empty($_SESSION['user_id']))
+{
+    header('location:index.php');
+}
+
+
+$user_id = $_SESSION['user_id'];
+
+// check for the social login
+if(empty($_SESSION['fb_login']))
+{
+  $user = $userObj->userData($user_id);
+  $verifyObj->authOnly();
+}
+
+?>
+<!DOCTYPE html>
+<html>
+<title>Track it!</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+<!-- Bootstrap core CSS -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
+<!-- Material Design Bootstrap -->
+<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.9/css/mdb.min.css" rel="stylesheet">
+<!-- JQuery -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.9/js/mdb.min.js"></script>
+<script type="text/javascript" src="man.js"></script>
+
+<style>
+    #inp{
+        border: 0;
+        border-bottom: solid black 2px;
+        width: 50%;
+        padding: 2%;
+        line-height: 2%;
+        font-size: 20px;
+        right: 0px;
+        position: relative;
+    }
+</style>
+<body style="background-color:black;">
+<?php include 'navbar.php'; ?>
+<!--/.Navbar -->
+              <div class="container" style="padding-top: 2%">
+                        <div style="padding-top: 3%;">
+
+                        <ul class="w3-ul w3-card-4" id="srcfrnd" style="background-color:white;">
+                          
+                            
+                          
+                        </ul>
+                        <ul class="w3-ul w3-card-4" id="prevfrnd" style="background-color:white;">
+                          
+                            <?php 
+                            // This function is used to the list of users who has send the friend request to me
+                            $friends=getfriendrequests();
+                            
+                            
+                            // This is used to display the list of users who has send the friend request to me
+                            foreach ($friends as $friend) {
+                            echo $friend;
+                            }
+
+                            ?>
+                    
+                          
+                        </ul></div>
+                    </div>
+                    
+                </div>
+</body>
+</html>
+<?php
+  include('footer.php');
+  ?>
